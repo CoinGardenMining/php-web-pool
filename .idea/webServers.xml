@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="bdf622ee-31f4-497e-868c-74a46b52287b" name="CoinGarden DB" url="http://ec2-54-93-172-19.eu-central-1.compute.amazonaws.com">
+        <fileTransfer host="ec2-54-93-172-19.eu-central-1.compute.amazonaws.com" port="22" privateKey="$USER_HOME$/Downloads/dashboardvmde.pem" rootFolder="/var/www/html/pool" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
