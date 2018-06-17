@@ -20,9 +20,9 @@
                <h2>New Blocks <label class="label label-info"><?=count($aInfo->candidates)?></label></h2>
                <?php
                if(count($aInfo->candidates) > 0) {
-                   foreach(count($aInfo->candidates) as $oBlock) {
+                   foreach($aInfo->candidates as $oBlock) {
                ?>
-                       <div class="card panel col-lg-2">
+                       <div class="card panel col-lg-2" style="margin-left:2px;">
                            <div class="card-header">
                                <h3>
                                    <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/block/<?=$oBlock->height?>">
@@ -47,7 +47,7 @@
                 if(count($aInfo->immature) > 0) {
                     foreach($aInfo->immature as $oBlock) {
                         ?>
-                        <div class="card panel col-lg-2">
+                        <div class="card panel col-lg-2" style="margin-left:2px;">
                             <div class="card-header">
                                 <h3>
                                     <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/block/<?=$oBlock->height?>">
@@ -79,7 +79,7 @@
                     if(count($aInfo->matured) > 0) {
                         foreach($aInfo->matured as $oBlock) {
                             ?>
-                            <div class="card panel col-lg-2">
+                            <div class="card panel col-lg-2" style="margin-left:2px;">
                                 <div class="card-header">
                                     <h3>
                                         <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/block/<?=$oBlock->height?>">
