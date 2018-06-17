@@ -1,0 +1,63 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jbinggeli
+ * Date: 17.06.18
+ * Time: 18:12
+ */
+
+function printHashes($iHash) {
+    switch($iHash) {
+        case $iHash <= 1000:
+            return number_format($iHash,2).' H/s';
+            break;
+        case $iHash <= (1000*1000):
+            return number_format($iHash/1000,2).' KH/s';
+            break;
+        case $iHash <= (1000*1000*1000):
+            return number_format($iHash/(1000*1000),2).' MH/s';
+            break;
+        case $iHash <= (1000*1000*1000*1000):
+            return number_format($iHash/(1000*1000*1000),2).' GH/s';
+            break;
+        default:
+            break;
+    }
+}
+?>
+<div class="col-sm-12 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#">
+                    <em class="fa fa-home"></em>
+                </a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Miners</h1>
+
+            <ul class="list-group">
+            <?php
+
+            if(count($aInfo->miners) > 0) {
+                $aMiners = (array)$aInfo->miners;
+                foreach(array_keys($aMiners) as $sMiner) {
+                    $oMiner = $aMiners[$sMiner];
+                ?>
+                <li class="list-group-item">
+                    <a href="/application/account/<?=$sMiner?>" title="View Account Details">
+                        <?=$sMiner?>
+                    </a>
+                    - <?=printHashes($oMiner->hr)?> - <?=date('d.m.Y H:i:s',$oMiner->lastBeat)?>
+                </li>
+                <?php
+                }
+            }
+            ?>
+            </ul>
+        </div>
+    </div>
+</div>

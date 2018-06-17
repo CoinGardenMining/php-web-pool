@@ -1,0 +1,100 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jbinggeli
+ * Date: 16.06.18
+ * Time: 18:04
+ */
+?>
+<div class="col-sm-12 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#">
+                    <em class="fa fa-home"></em>
+                </a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+        <h1>Getting started</h1>
+        <p>
+            The following is a quick start guide of mining Ethereum Classic on Windows 7 or greater x64.
+
+            To mine Ethereum Classic you need a GPU, 4+GB RAM, Ethereum Classic account and GPU miner. The GPU must have at least 4GB memory. Recomended AMD GPU driver 15.12.
+        </p>
+
+        <p>Miner can be downloaded from the link below.</p>
+        <a href="https://bitcointalk.org/index.php?topic=1433925.0" target="_blank" class="btn btn-primary">Claymore DualMiner (Windows+Linux AMD+Nvidia)</a>
+        <a href="https://github.com/FinMiner/FinMiner/releases/" target="_blank" class="btn btn-primary">FinMiner (Windows Nvidia)</a>
+        <a href="https://github.com/ethereum-mining/ethminer/releases" target="_blank" class="btn btn-primary">Ethminer (Windows+Linux AMD+Nvidia)</a>
+
+
+        <h2>Pool settings</h2>
+        <ul class="list-group">
+            <li class="list-group-item">
+                Pool Fee <label class="label label-success"><?=$aConfig->unlocker->poolFee?> %</label>
+                <small>50% of Pool Fees are donated to Ethereum Classic Foundation</small><br/>
+            </li>
+            <li class="list-group-item">
+                Min Payout Treshold <label class="label label-success"><?=($aConfig->payouts->threshold/1000000000)?> ETC </label>
+            </li>
+            <li class="list-group-item">
+                Difficulty is static and equal 2 billion. Recommended minimum hashrate is 2 Mh/s
+            </li>
+        </ul>
+
+        <table class="table">
+            <thead>
+                <th scope="col">
+                    Location
+                </th>
+                <th scope="col">
+                    Server Host
+                </th>
+                <th scope="col">
+                    Stratum Port
+                </th>
+                <th scope="col">
+                    Getwork Port
+                </th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Frankfurt, EU</th>
+                    <td>etc-eu1.cgpools.io</td>
+                    <td>8008</td>
+                    <td>8888</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Mining Clients</h2>
+        <h3>Claymore Dual Miner</h3>
+        <h5>Windows</h5>
+        Make sure your start.bat file looks like this <br/>
+        <pre>
+        setx GPU_FORCE_64BIT_PTR 0
+        setx GPU_MAX_HEAP_SIZE 100
+        setx GPU_USE_SYNC_OBJECTS 1
+        setx GPU_MAX_ALLOC_PERCENT 100
+        setx GPU_SINGLE_ALLOC_PERCENT 100
+
+        EthDcrMiner64.exe -epool etc-eu1.cgpools.org:8008 -ewal YOUR_ETC_ADDRESS/YOUR_WORKER_NAME/YOUR_EMAIL -mode 1
+        </pre>
+
+        <h5>Linux</h5>
+        Make sure your start.sh file looks like this <br/>
+        <pre>
+        export GPU_FORCE_64BIT_PTR 0
+        export GPU_MAX_HEAP_SIZE 100
+        export GPU_USE_SYNC_OBJECTS 1
+        export GPU_MAX_ALLOC_PERCENT 100
+        export GPU_SINGLE_ALLOC_PERCENT 100
+
+        ./ethdcrminer64 -epool etc-eu1.cgpools.org:8008 -ewal YOUR_ETC_ADDRESS/YOUR_WORKER_NAME/YOUR_EMAIL -mode 1
+        </pre>
+        </div>
+    </div>
+</div>

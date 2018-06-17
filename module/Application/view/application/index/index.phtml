@@ -1,25 +1,262 @@
-<h1>Mining Pools <?=count($aPools)?></h1>
+<div class="col-sm-12 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#">
+                    <em class="fa fa-home"></em>
+                </a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div><!--/.row-->
 
-<div class="row">
-<?php
-if(count($aPools) > 0) {
-    foreach($aPools as $oPool) {
-    ?>
-        <div class="col-md-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Dashboard</h1>
+        </div>
+    </div><!--/.row-->
+
+    <div class="panel panel-container">
+        <div class="row">
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-teal panel-widget border-right">
+                    <div class="row no-padding"><em class="fa fa-xl fa-shopping-cart color-blue"></em>
+                        <div class="large">
+                        <?php
+                        if($oPool->dTotalHashrate >= 1000000000) {
+                            echo number_format($oPool->dTotalHashrate/1000000000,2).' GH/s';
+                        }
+                        ?>
+                        </div>
+                        <div class="text-muted">Pool Hashrate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-blue panel-widget border-right">
+                    <div class="row no-padding"><em class="fa fa-xl fa-comments color-orange"></em>
+                        <div class="large"><?=$oPool->iCurrentBlock?></div>
+                        <div class="text-muted">Block Height</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-orange panel-widget border-right">
+                    <div class="row no-padding"><em class="fa fa-xl fa-users color-teal"></em>
+                        <div class="large"><?=number_format($oPool->iCurrentDiff/1000000000000,3,'.','\'')?> T</div>
+                        <div class="text-muted">Difficulty</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-red panel-widget ">
+                    <div class="row no-padding"><em class="fa fa-xl fa-search color-red"></em>
+                        <div class="large"><?=$oPool->iTotalMiners?></div>
+                        <div class="text-muted">Miners online</div>
+                    </div>
+                </div>
+            </div>
+        </div><!--/.row-->
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4><?=$oPool->name?></h4>
-                </div>
+                    Pool Hashrate Overview
+                    <ul class="pull-right panel-settings panel-button-tab-right">
+                        <li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+                                <em class="fa fa-cogs"></em>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <ul class="dropdown-settings">
+                                        <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 1
+                                            </a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 2
+                                            </a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 3
+                                            </a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
                 <div class="panel-body">
-                    Current Block: <b><?=$oPool->iCurrentBlock?></b><br/>
-                    Difficulty: <b><?=$oPool->iCurrentDiff?></b><br/>
-                    Miners online: <b><?=$oPool->iTotalMiners?></b><br/>
-                    Pool Hashrate: <b><?=$oPool->dTotalHashrate?></b><br/>
+                    <div class="canvas-wrapper">
+                        <canvas class="main-chart" id="line-chart" height="200" width="600"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    <?php
-    }
-}
-?>
-</div>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>ETC Price</h4>
+                    <?php
+                    $iPercent = 100;
+                    if((double)$aCoinData->percent_change_24h <= 0) {
+                        $iPercent = round(100-$aCoinData->percent_change_24h);
+                    }
+                    ?>
+                    <div class="easypiechart" id="easypiechart-blue" data-percent="<?=$iPercent?>" ><span class="percent">
+                    $ <?=number_format($aCoinData->price,2,'.','\'')?>
+                            <?php
+                            $sChange = '';
+                            if($aCoinData->percent_change_24h > 0 ){
+                                $sChange = '<label class="label label-success">+ '.$aCoinData->percent_change_24h.' %</label>';
+                            } else {
+                                $sChange = '<label class="label label-danger">'.$aCoinData->percent_change_24h.' %</label>';
+                            }
+
+                            ?><?=$sChange?>
+                    </span></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Net Hashrate</h4>
+                    <div class="easypiechart" id="easypiechart-orange" data-percent="90" ><span class="percent">-</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Cur. Round Variance</h4>
+                    <div class="easypiechart" id="easypiechart-teal" data-percent="65" ><span class="percent">65%</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Visitors</h4>
+                    <div class="easypiechart" id="easypiechart-red" data-percent="27" ><span class="percent">27%</span></div>
+                </div>
+            </div>
+        </div>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    Timeline
+                    <ul class="pull-right panel-settings panel-button-tab-right">
+                        <li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+                                <em class="fa fa-cogs"></em>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <ul class="dropdown-settings">
+                                        <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 1
+                                            </a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 2
+                                            </a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">
+                                                <em class="fa fa-cog"></em> Settings 3
+                                            </a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+                <div class="panel-body timeline-container">
+                    <ul class="timeline">
+                        <li>
+                            <div class="timeline-badge"><em class="glyphicon glyphicon-pushpin"></em></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Interface Update V2</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at sodales nisl. Donec malesuada orci ornare risus finibus feugiat.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="timeline-badge primary"><em class="glyphicon glyphicon-link"></em></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">ETC Pool out of closed Beta</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div><!--/.col-->
+        <div class="col-md-6">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    Pool Information
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-info-circle"></em></span></div>
+                <div class="panel-body articles-container">
+                    <div class="article border-bottom">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-2 col-md-2 date">
+                                    <div class="large"><?=($aConfig->payouts->threshold/1000000000)?></div>
+                                    <div class="text-muted">Ether</div>
+                                </div>
+                                <div class="col-xs-10 col-md-10">
+                                    <h4><a href="#">Minimum Payout Treshold</a></h4>
+                                    <p>Payments running twice a day. Once you reach treshold you will receive your coins.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div><!--End .article-->
+
+                    <div class="article border-bottom">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-2 col-md-2">
+                                    <div class="large"><?=$aConfig->unlocker->poolFee?>.0</div>
+                                    <div class="text-muted">%</div>
+                                </div>
+                                <div class="col-xs-10 col-md-10">
+                                    <h4><a href="#">Pool Fee</a></h4>
+                                    <p>50% of Pool Fees are donated to Ethereum Classic Foundation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div><!--End .article-->
+                </div>
+            </div>
+        </div><!--/.col-->
+
+        <div class="col-sm-12">
+            <p class="back-link">Lumino Theme by <a href="https://www.medialoot.com">Medialoot</a></p>
+        </div>
+    </div><!--/.row-->
+</div>	<!--/.main-->
+<script>
+    window.onload = function () {
+        var chart1 = document.getElementById("line-chart").getContext("2d");
+        window.myLine = new Chart(chart1).Line(lineChartData, {
+            responsive: true,
+            scaleLineColor: "rgba(0,0,0,.2)",
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleFontColor: "#c5c7cc"
+        });
+    };
+</script>

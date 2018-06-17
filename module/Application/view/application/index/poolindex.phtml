@@ -1,0 +1,25 @@
+<h1>Mining Pools <?=count($aPools)?></h1>
+
+<div class="row">
+    <?php
+    if(count($aPools) > 0) {
+        foreach($aPools as $oPool) {
+            ?>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><?=$oPool->name?></h4>
+                    </div>
+                    <div class="panel-body">
+                        Current Block: <b><?=$oPool->iCurrentBlock?></b><br/>
+                        Difficulty: <b><?=$oPool->iCurrentDiff?></b><br/>
+                        Miners online: <b><?=$oPool->iTotalMiners?></b><br/>
+                        Pool Hashrate: <b><?=$oPool->dTotalHashrate?></b><br/>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+    }
+    ?>
+</div>

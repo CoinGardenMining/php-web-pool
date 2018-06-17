@@ -13,6 +13,8 @@
 return [
     'Zend\Router',
     'Zend\Validator',
+    'Zend\Db',
+    'DoctrineModule',
+    'DoctrineORMModule',
     'Application',
-    'Pool',
 ];

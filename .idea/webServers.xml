@@ -10,6 +10,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="c356725a-fcaf-483e-86ac-161867a9472a" name="Coingarden ETC" url="http://etc-eu1.cgpools.io">
+        <fileTransfer host="etc-eu1.cgpools.io" port="22" privateKey="$USER_HOME$/Downloads/dashboardvmde.pem" rootFolder="/var/www/html/www2" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>
