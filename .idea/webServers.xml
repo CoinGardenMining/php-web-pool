@@ -18,6 +18,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="cae627c9-eaf1-43ff-8bce-74e3e077ec2e" name="CoinGarden ELLA" url="http://ella-eu1.cgpools.io">
+        <fileTransfer host="ella-eu1.cgpools.io" port="22" privateKey="$USER_HOME$/Downloads/dashboardvmde.pem" rootFolder="/var/www/php-web-pool" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>
