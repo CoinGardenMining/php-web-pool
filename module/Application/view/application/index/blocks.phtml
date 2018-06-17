@@ -1,0 +1,109 @@
+<div class="col-sm-12 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#">
+                    <em class="fa fa-home"></em>
+                </a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div><!--/.row-->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Pool Blocks
+            </h1>
+        </div>
+    </div><!--/.row-->
+
+        <div class="row">
+           <div class="col-lg-12">
+               <h2>New Blocks <label class="label label-info"><?=count($aInfo->candidates)?></label></h2>
+               <?php
+               if(count($aInfo->candidates) > 0) {
+                   foreach(count($aInfo->candidates) as $oBlock) {
+               ?>
+                       <div class="card panel col-lg-2">
+                           <div class="card-header">
+                               <h3>
+                                   <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/block/<?=$oBlock->height?>">
+                                       <?=$oBlock->height?>
+                                   </a>
+                               </h3>
+                           </div>
+                           <div class="card-block">
+                               <small><i>Found
+                                       <br/>
+                                       <?=date('d.m.Y H:i:s',$oBlock->timestamp)?></i></small>
+                           </div>
+                       </div>
+                   <?php
+                   }
+               }
+               ?>
+            </div>
+            <div class="col-lg-12">
+                <h2>Immature Blocks <label class="label label-info"><?=count($aInfo->immature)?></label></h2>
+                <?php
+                if(count($aInfo->immature) > 0) {
+                    foreach($aInfo->immature as $oBlock) {
+                        ?>
+                        <div class="card panel col-lg-2">
+                            <div class="card-header">
+                                <h3>
+                                    <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/block/<?=$oBlock->height?>">
+                                        <?=$oBlock->height?>
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="card-block">
+                                <small><i>Found
+                                        <br/>
+                                        <?=date('d.m.Y H:i:s',$oBlock->timestamp)?></i></small>
+                            </div>
+                            <div class="card-footer">
+                                <label class="label label-warning">
+                                    <?=number_format(($oBlock->reward/1000000000000000000),2)?> <?=strtoupper($this->layout()->sCoin)?>
+                                </label>
+                                <br/>
+                                <br/>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+            <div class="col-lg-12">
+                <h2>    Blocks <label class="label label-info"><?=count($aInfo->matured)?></label></h2>
+                    <?php
+                    if(count($aInfo->matured) > 0) {
+                        foreach($aInfo->matured as $oBlock) {
+                            ?>
+                            <div class="card panel col-lg-2">
+                                <div class="card-header">
+                                    <h3>
+                                        <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/block/<?=$oBlock->height?>">
+                                            <?=$oBlock->height?>
+                                        </a>
+                                    </h3>
+                                </div>
+                                <div class="card-block">
+                                    <small><i>Found
+                                    <br/>
+                                    <?=date('d.m.Y H:i:s',$oBlock->timestamp)?></i></small>
+                                </div>
+                                <div class="card-footer">
+                                    <label class="label label-success">
+                                        <?=number_format(($oBlock->reward/1000000000000000000),2)?> <?=strtoupper($this->layout()->sCoin)?>
+                                    </label>
+                                    <br/>
+                                    <br/>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+            </div>
+        </div>
+</div>

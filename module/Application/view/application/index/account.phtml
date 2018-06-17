@@ -35,34 +35,75 @@ function printHashes($iHash) {
             <li class="active">Dashboard</li>
         </ol>
     </div><!--/.row-->
-
     <div class="row">
         <div class="col-lg-12">
-            <h1>Account <?=$sAccount?></h1>
-            <b>Current Hashrate: <?=printHashes($aInfo->currentHashrate)?></b><br/>
-            <b>Hashrate (3h): <?=printHashes($aInfo->hashrate)?></b>
+            <h1 class="page-header">
+                Account <small><?=$sAccount?></small>
+            </h1>
+        </div>
+    </div><!--/.row-->
+
+    <div class="panel panel-container">
+        <div class="row">
+            <div class="col-xs-6 col-md-4 col-lg-4 no-padding">
+                <div class="panel panel-teal panel-widget border-right">
+                    <div class="row no-padding"><em class="fa fa-xl fa-dashboard color-blue"></em>
+                        <div class="large">
+                            <?=printHashes($aInfo->currentHashrate)?>
+                        </div>
+                        <div class="text-muted">Current Hashrate (30min)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-4 col-lg-4 no-padding">
+                <div class="panel panel-teal panel-widget border-right">
+                    <div class="row no-padding"><em class="fa fa-xl fa-dashboard color-blue"></em>
+                        <div class="large">
+                            <?=printHashes($aInfo->hashrate)?>
+                        </div>
+                        <div class="text-muted">Hashrate (3h)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-4 col-lg-4 no-padding">
+                <div class="panel panel-teal panel-widget border-right">
+                    <div class="row no-padding"><em class="fa fa-xl fa-server color-blue"></em>
+                        <div class="large">
+                            <?=count((array)$aInfo->workers)?>
+                        </div>
+                        <div class="text-muted">Workers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
             <h2>Workers (<?=count((array)$aInfo->workers)?>)</h2>
             <ul class="list-group">
-                <?php
-
-                if(count((array)$aInfo->workers) > 1) {
-                    $aMiners = (array)$aInfo->workers;
-                    foreach(array_keys($aMiners) as $sMiner) {
+            <?php
+            if(count((array)$aInfo->workers) > 0) {
+                $aMiners = (array)$aInfo->workers;
+                foreach(array_keys($aMiners) as $sMiner) {
+                    if($sMiner == '0') {
+                        $oMiner = array_values($aMiners)[0];
+                    } else {
                         $oMiner = $aMiners[$sMiner];
-                        ?>
-                        <li class="list-group-item">
-                            <?=$sMiner?> - <?=printHashes($oMiner->hr)?> -  <?=printHashes($oMiner->hr2)?> - <?=date('d.m.Y H:i:s',$oMiner->lastBeat)?>
-                        </li>
-                        <?php
                     }
-                } else {
-                ?>
+                    ?>
                     <li class="list-group-item">
-                        0 - <?=printHashes($aInfo->currentHashrate)?> -  <?=printHashes($aInfo->hashrate)?>
+                        <?=$sMiner?> - <?=printHashes($oMiner->hr)?> -  <?=printHashes($oMiner->hr2)?> - <?=date('d.m.Y H:i:s',$oMiner->lastBeat)?>
                     </li>
-                <?php
+                    <?php
                 }
+            } else {
                 ?>
+                <li class="list-group-item">
+                    0 - <?=printHashes($aInfo->currentHashrate)?> -  <?=printHashes($aInfo->hashrate)?>
+                </li>
+                <?php
+            }
+            ?>
             </ul>
         </div>
     </div>

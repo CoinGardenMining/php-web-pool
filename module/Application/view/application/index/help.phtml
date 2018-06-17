@@ -63,9 +63,9 @@
             <tbody>
                 <tr>
                     <th scope="row">Frankfurt, EU</th>
-                    <td>etc-eu1.cgpools.io</td>
-                    <td>8008</td>
-                    <td>8888</td>
+                    <td><?=$sURL?></td>
+                    <td><?=explode(':',$aConfig->proxy->stratum->listen)[1]?></td>
+                    <td><?=explode(':',$aConfig->proxy->listen)[1]?></td>
                 </tr>
             </tbody>
         </table>

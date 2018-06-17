@@ -37,5 +37,25 @@ class Module
         $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
         $time_start = microtime(true);
         $viewModel->timestart = $time_start;
+        $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
+        $viewModel->sCoin = $aConfig->coin;
+        switch($aConfig->coin) {
+            case 'ella':
+                $viewModel->sCoinLabel = 'Ellaism';
+                $viewModel->sExplorerURL = 'https://explorer.ellaism.org';
+                break;
+            case 'eth':
+                $viewModel->sCoinLabel = 'Ethereum';
+                $viewModel->sExplorerURL = 'https://explorer.ellaism.org/block';
+                break;
+            case 'etc':
+                $viewModel->sCoinLabel = 'Ethereum Classic';
+                $viewModel->sExplorerURL = 'https://explorer.ellaism.org/block';
+                break;
+            default:
+                $viewModel->sCoinLabel = 'Unknown';
+                $viewModel->sExplorerURL = 'https://explorer.ellaism.org/block';
+                break;
+        }
     }
 }

@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <?= $this->headTitle('CG Pools ETC Pool')->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?= $this->headTitle('CG Pools '.strtoupper($this->sCoin).' Pool')->setSeparator(' - ')->setAutoEscape(false) ?>
 
     <?= $this->headMeta()
         ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -40,17 +40,17 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="<?= $this->url('home') ?>">
-                <img src="<?= $this->basePath('img/zf-logo-mark.svg') ?>" height="28" alt="Zend Framework <?= \Application\Module::VERSION ?>"/> CG Pools
+                <img src="<?= $this->basePath('/assets/images/logo.png') ?>" height="60" alt="CG" style="float:left; margin-right:6px; margin-top:-14px;"/> <label style="color:#53b685;">CG</label> Pools
             </a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="<?= $this->url('home') ?>">Home</a></li>
-                <li><a href="/application/help">Help</a></li>
-                <li><a href="/application/blocks">Blocks</a></li>
-                <li><a href="/application/miners">Miners</a></li>
-                <li><a href="/application/payments">Payments</a></li>
-                <li><a href="/application/about">About</a></li>
+                <li <?php if($this->sActive == 'home') { echo 'class="active"'; } ?>><a href="<?= $this->url('home') ?>">Home</a></li>
+                <li <?php if($this->sActive == 'help') { echo 'class="active"'; } ?>><a href="/application/help">Help</a></li>
+                <li <?php if($this->sActive == 'blocks') { echo 'class="active"'; } ?>><a href="/application/blocks">Blocks</a></li>
+                <li <?php if($this->sActive == 'miners') { echo 'class="active"'; } ?>><a href="/application/miners">Miners</a></li>
+                <li <?php if($this->sActive == 'payments') { echo 'class="active"'; } ?>><a href="/application/payments">Payments</a></li>
+                <li <?php if($this->sActive == 'about') { echo 'class="active"'; } ?>><a href="/application/about">About</a></li>
             </ul>
         </div>
     </div>

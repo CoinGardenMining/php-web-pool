@@ -14,6 +14,15 @@ use Zend\Db\TableGateway\TableGateway;
 
 class IndexController extends AbstractActionController
 {
+    protected $aPools = [];
+
+    public function __construct()
+    {
+        $this->aPools = [
+            'etc' => 'etc-eu1.cgpools.io',
+            'ella' => 'ella-eu1.cgpools.io',
+        ];
+    }
 
     public function poolindexAction()
     {
@@ -22,10 +31,16 @@ class IndexController extends AbstractActionController
          */
         $aPoolsDB = (object)[
             'etc-eu1' => (object)[
-                'api_url_stats'=>'http://ec2-18-184-253-12.eu-central-1.compute.amazonaws.com:8080/apietc/stats',
+                'api_url_stats'=>'http://etc-eu1.cgpools.io:8080/apietc/stats',
                 'type'=>'open-ethereum-pool',
                 'pool_coin'=>'ETC',
-                'name'=>'ETC Dev Pool',
+                'name'=>'ETC Pool',
+            ],
+            'ella-eu1' => (object)[
+                'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/apietc/stats',
+                'type'=>'open-ethereum-pool',
+                'pool_coin'=>'ELLA',
+                'name'=>'ELLA Pool',
             ],
             'zec-eu1' => (object)[
                 'api_url_stats'=>'http://ec2-18-184-253-12.eu-central-1.compute.amazonaws.com:8080/apietc/stats',
@@ -73,11 +88,26 @@ class IndexController extends AbstractActionController
     }
 
     public function indexAction() {
+        $this->layout()->sActive = 'home';
+
         $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
 
-        $oPool = (object)[
-            'type'=>'open-ethereum-pool',
-            'api_url_stats'=>'http://ec2-18-184-253-12.eu-central-1.compute.amazonaws.com:8080/apietc/stats'];
+        $oPool = (object)[];
+        switch($aConfig->coin) {
+            case 'etc':
+                $oPool = (object)[
+                    'type'=>'open-ethereum-pool',
+                    'api_url_stats'=>'http://etc-eu1.cgpools.io:8080/apietc/stats'];
+                break;
+            case 'ella':
+                $oPool = (object)[
+                    'type'=>'open-ethereum-pool',
+                    'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/apietc/stats'];
+                break;
+            default:
+                break;
+        }
+
 
         switch($oPool->type) {
             case 'open-ethereum-pool':
@@ -97,7 +127,17 @@ class IndexController extends AbstractActionController
         }
 
         $aCoinData = [];
-        $sRet = file_get_contents('https://api.coinmarketcap.com/v2/ticker/1321/?convert=USD');
+        $sRet = '{}';
+        switch($aConfig->coin) {
+            case 'etc':
+                $sRet = file_get_contents('https://api.coinmarketcap.com/v2/ticker/1321/?convert=USD');
+                break;
+            case 'ella':
+                $sRet = file_get_contents('https://api.coinmarketcap.com/v2/ticker/2122/?convert=USD');
+                break;
+            default:
+                break;
+        }
         $oInfo = json_decode($sRet);
         if(is_object($oInfo)) {
             $aCoinData = (object)[
@@ -120,16 +160,31 @@ class IndexController extends AbstractActionController
     }
 
     public function helpAction() {
+        $this->layout()->sActive = 'help';
+
         $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
 
         return [
             'aConfig'=>$aConfig,
+            'sURL'=>$this->aPools[$aConfig->coin],
         ];
     }
 
     public function minersAction() {
+        $this->layout()->sActive = 'miners';
+
         $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
-        $json = file_get_contents('http://ec2-18-184-253-12.eu-central-1.compute.amazonaws.com:8080/apietc/miners');
+        $json = '{}';
+        switch($aConfig->coin) {
+            case 'etc':
+                $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/miners');
+                break;
+            case 'ella':
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/miners');
+                break;
+            default:
+                break;
+        }
         $obj = json_decode($json);
 
         return [
@@ -139,9 +194,21 @@ class IndexController extends AbstractActionController
     }
 
     public function accountAction() {
+        $this->layout()->sActive = 'miners';
+
         $sAccount = $this->params('id');
         $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
-        $json = file_get_contents('http://ec2-18-184-253-12.eu-central-1.compute.amazonaws.com:8080/apietc/accounts/'.$sAccount);
+        $json = '{}';
+        switch($aConfig->coin) {
+            case 'etc':
+                $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/accounts/'.$sAccount);
+                break;
+            case 'ella':
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/accounts/'.$sAccount);
+                break;
+            default:
+                break;
+        }
         $obj = json_decode($json);
 
         return [
@@ -149,5 +216,34 @@ class IndexController extends AbstractActionController
             'aInfo'=>$obj,
             'sAccount'=>$sAccount,
         ];
+    }
+
+    public function blocksAction() {
+        $this->layout()->sActive = 'blocks';
+
+        $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
+        $json = '{}';
+        switch($aConfig->coin) {
+            case 'etc':
+                $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/blocks');
+                break;
+            case 'ella':
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/blocks');
+                break;
+            default:
+                break;
+        }
+        $obj = json_decode($json);
+
+        return [
+            'aConfig'=>$aConfig,
+            'aInfo'=>$obj,
+        ];
+    }
+
+    public function aboutAction() {
+        $this->layout()->sActive = 'about';
+
+        return [];
     }
 }
