@@ -47,7 +47,12 @@
             <ul class="nav navbar-nav">
                 <li <?php if($this->sActive == 'home') { echo 'class="active"'; } ?>><a href="<?= $this->url('home') ?>">Home</a></li>
                 <li <?php if($this->sActive == 'help') { echo 'class="active"'; } ?>><a href="/application/help">Help</a></li>
-                <li <?php if($this->sActive == 'blocks') { echo 'class="active"'; } ?>><a href="/application/blocks">Blocks</a></li>
+                <li <?php if($this->sActive == 'blocks') { echo 'class="active"'; } ?>><a href="/application/blocks">Blocks
+                        <?php
+                        if($this->oBlocks->candidatesTotal > 0) {
+                            echo '<span class="label label-info">'.$this->oBlocks->candidatesTotal.'</span>';
+                        }
+                        ?></a></li>
                 <li <?php if($this->sActive == 'miners') { echo 'class="active"'; } ?>><a href="/application/miners">Miners</a></li>
                 <li <?php if($this->sActive == 'payments') { echo 'class="active"'; } ?>><a href="/application/payments">Payments</a></li>
                 <li <?php if($this->sActive == 'about') { echo 'class="active"'; } ?>><a href="/application/about">About</a></li>

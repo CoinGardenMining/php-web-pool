@@ -148,15 +148,27 @@ function printHashes($iHash) {
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>Cur. Round Variance</h4>
-                    <div class="easypiechart" id="easypiechart-teal" data-percent="65" ><span class="percent">65%</span></div>
+                    <?php
+                    $dVariance = number_format(($oInfo->stats->roundShares/$oInfo->nodes[0]->difficulty)*100,2);
+                    ?>
+                    <div class="easypiechart" id="easypiechart-teal" data-percent="<?=$dVariance?>" ><span class="percent"><?=$dVariance?>%</span></div>
                 </div>
             </div>
         </div>
         <div class="col-xs-6 col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
-                    <h4>Visitors</h4>
-                    <div class="easypiechart" id="easypiechart-red" data-percent="27" ><span class="percent">27%</span></div>
+                    <h4>Current Luck</h4>
+                    <?php
+                    $dLuck = 0;
+                    $aLuck = (array)$oBlockInfo->luck;
+                    foreach($aLuck as $oLuck) {
+                        $dLuck = $oLuck->luck*100;
+                        break;
+                    }
+                    ?>
+                    <div class="easypiechart" id="easypiechart-red" data-percent="<?=number_format($dLuck,2)?>" >
+                        <span class="percent"><?=number_format($dLuck,2)?>%</span></div>
                 </div>
             </div>
         </div>

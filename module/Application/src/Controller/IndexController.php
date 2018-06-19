@@ -15,6 +15,7 @@ use Zend\Db\TableGateway\TableGateway;
 class IndexController extends AbstractActionController
 {
     protected $aPools = [];
+    protected $oRedis = false;
 
     public function __construct()
     {
@@ -56,6 +57,7 @@ class IndexController extends AbstractActionController
             ],
         ];
         $aPools = [];
+        $obj = [];
 
         if(count($aPoolsDB) > 0) {
             foreach($aPoolsDB as $oPool) {
@@ -84,6 +86,7 @@ class IndexController extends AbstractActionController
 
         return [
             'aPools'=>$aPools,
+            'aInfo'=>$obj,
         ];
     }
 
@@ -91,18 +94,22 @@ class IndexController extends AbstractActionController
         $this->layout()->sActive = 'home';
 
         $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
-
         $oPool = (object)[];
+        $oBlockInfo = [];
         switch($aConfig->coin) {
             case 'etc':
                 $oPool = (object)[
                     'type'=>'open-ethereum-pool',
                     'api_url_stats'=>'http://etc-eu1.cgpools.io:8080/apietc/stats'];
+                $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/blocks');
+                $oBlockInfo = json_decode($json);
                 break;
             case 'ella':
                 $oPool = (object)[
                     'type'=>'open-ethereum-pool',
                     'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/apietc/stats'];
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/blocks');
+                $oBlockInfo = json_decode($json);
                 break;
             default:
                 break;
@@ -156,6 +163,7 @@ class IndexController extends AbstractActionController
             'oPool'=>$oPool,
             'oInfo'=>$obj,
             'aCoinData'=>$aCoinData,
+            'oBlockInfo'=>$oBlockInfo,
         ];
     }
 
@@ -211,10 +219,37 @@ class IndexController extends AbstractActionController
         }
         $obj = json_decode($json);
 
+        $aCoinData = [];
+        $sRet = '{}';
+        switch($aConfig->coin) {
+            case 'etc':
+                $sRet = file_get_contents('https://api.coinmarketcap.com/v2/ticker/1321/?convert=USD');
+                break;
+            case 'ella':
+                $sRet = file_get_contents('https://api.coinmarketcap.com/v2/ticker/2122/?convert=USD');
+                break;
+            default:
+                break;
+        }
+        $oInfo = json_decode($sRet);
+        if(is_object($oInfo)) {
+            $aCoinData = (object)[
+                'max_supply'=>$oInfo->data->max_supply,
+                'circulating_supply'=>$oInfo->data->circulating_supply,
+                'price'=>$oInfo->data->quotes->USD->price,
+                'volume_24h'=>$oInfo->data->quotes->USD->volume_24h,
+                'market_cap'=>$oInfo->data->quotes->USD->market_cap,
+                'percent_change_24h'=>$oInfo->data->quotes->USD->percent_change_24h,
+                'date_last_update'=>date('Y-m-d H:i:s',time()),
+            ];
+        }
+
         return [
             'aConfig'=>$aConfig,
             'aInfo'=>$obj,
             'sAccount'=>$sAccount,
+            'aCoinData'=>$aCoinData,
+            'oPool'=>$this->getPoolInfo(),
         ];
     }
 
@@ -245,5 +280,67 @@ class IndexController extends AbstractActionController
         $this->layout()->sActive = 'about';
 
         return [];
+    }
+
+    public function paymentsAction() {
+        $this->layout()->sActive = 'payments';
+
+        $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
+        $json = '{}';
+        switch($aConfig->coin) {
+            case 'etc':
+                $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/payments');
+                break;
+            case 'ella':
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/payments');
+                break;
+            default:
+                break;
+        }
+        $obj = json_decode($json);
+
+        return [
+            'aConfig'=>$aConfig,
+            'aInfo'=>$obj,
+        ];
+    }
+
+    private function getPoolInfo() {
+        $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
+        $oPool = (object)[];
+        switch($aConfig->coin) {
+            case 'etc':
+                $oPool = (object)[
+                    'type'=>'open-ethereum-pool',
+                    'api_url_stats'=>'http://etc-eu1.cgpools.io:8080/apietc/stats'];
+                break;
+            case 'ella':
+                $oPool = (object)[
+                    'type'=>'open-ethereum-pool',
+                    'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/apietc/stats'];
+                break;
+            default:
+                break;
+        }
+
+
+        switch($oPool->type) {
+            case 'open-ethereum-pool':
+                $json = file_get_contents($oPool->api_url_stats);
+                $obj = json_decode($json);
+                $oPool->dTotalHashrate = $obj->hashrate;
+                $oPool->iTotalMiners = $obj->minersTotal;
+                $oPool->iCurrentBlock = $obj->nodes[0]->height;
+                $oPool->iCurrentDiff = $obj->nodes[0]->difficulty;
+                break;
+            default:
+                $oPool->dTotalHashrate = 0;
+                $oPool->iTotalMiners = 0;
+                $oPool->iCurrentBlock = 0;
+                $oPool->iCurrentDiff = 0;
+                break;
+        }
+
+        return $oPool;
     }
 }

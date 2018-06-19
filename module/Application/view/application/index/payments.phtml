@@ -1,0 +1,54 @@
+<div class="col-sm-12 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#">
+                    <em class="fa fa-home"></em>
+                </a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    Latest Payments
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-info-circle"></em></span></div>
+                <div class="panel-body articles-container">
+                    <?php
+
+                    if(count((array)$aInfo->payments) > 0) {
+                        $aMiners = (array)$aInfo->payments;
+                        foreach($aMiners as $oMiner) {
+                            ?>
+                            <div class="article border-bottom">
+                                <div class="col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-2 col-md-2 date">
+                                            <div class="large"><?=number_format($oMiner->amount/1000000000,2)?></div>
+                                            <div class="text-muted"><?=strtoupper($this->layout()->sCoin)?></div>
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <h4>To: <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/addr/<?=$oMiner->address?>" title="View Address on Blockchain">
+                                                    <?=$oMiner->address?>
+                                                </a></h4>
+                                            <p>
+                                                <?=date('d.m.Y H:i:s',$oMiner->timestamp)?>
+                                                <a target="_blank" href="<?=$this->layout()->sExplorerURL?>/tx/<?=$oMiner->tx?>" title="View Payment on Blockchain">
+                                                    <?=$oMiner->tx?>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div><!--End .article-->
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div><!--/.col-->
+    </div>
+</div>

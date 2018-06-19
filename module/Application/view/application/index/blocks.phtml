@@ -17,7 +17,7 @@
 
         <div class="row">
            <div class="col-lg-12">
-               <h2>New Blocks <label class="label label-info"><?=count($aInfo->candidates)?></label></h2>
+               <h2>New Blocks <label class="label label-info"><?=$aInfo->candidatesTotal?></label></h2>
                <?php
                if(count($aInfo->candidates) > 0) {
                    foreach($aInfo->candidates as $oBlock) {
@@ -42,7 +42,7 @@
                ?>
             </div>
             <div class="col-lg-12">
-                <h2>Immature Blocks <label class="label label-info"><?=count($aInfo->immature)?></label></h2>
+                <h2>Immature Blocks <label class="label label-info"><?=$aInfo->immatureTotal?></label></h2>
                 <?php
                 if(count($aInfo->immature) > 0) {
                     foreach($aInfo->immature as $oBlock) {
@@ -74,7 +74,7 @@
                 ?>
             </div>
             <div class="col-lg-12">
-                <h2>    Blocks <label class="label label-info"><?=count($aInfo->matured)?></label></h2>
+                <h2>    Blocks <label class="label label-info"><?=$aInfo->maturedTotal?></label></h2>
                     <?php
                     if(count($aInfo->matured) > 0) {
                         foreach($aInfo->matured as $oBlock) {

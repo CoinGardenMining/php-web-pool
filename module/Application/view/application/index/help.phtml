@@ -20,9 +20,7 @@
         <div class="col-lg-12">
         <h1>Getting started</h1>
         <p>
-            The following is a quick start guide of mining Ethereum Classic on Windows 7 or greater x64.
-
-            To mine Ethereum Classic you need a GPU, 4+GB RAM, Ethereum Classic account and GPU miner. The GPU must have at least 4GB memory. Recomended AMD GPU driver 15.12.
+            To mine <?=$this->layout()->sCoinLabel?> you need a GPU, 4+GB RAM, <?=$this->layout()->sCoinLabel?> account and GPU miner. The GPU must have at least 4GB memory. Recomended AMD GPU driver 15.12.
         </p>
 
         <p>Miner can be downloaded from the link below.</p>
@@ -81,7 +79,7 @@
         setx GPU_MAX_ALLOC_PERCENT 100
         setx GPU_SINGLE_ALLOC_PERCENT 100
 
-        EthDcrMiner64.exe -epool etc-eu1.cgpools.org:8008 -ewal YOUR_ETC_ADDRESS/YOUR_WORKER_NAME/YOUR_EMAIL -mode 1
+        EthDcrMiner64.exe -epool <?=$sURL?>:<?=explode(':',$aConfig->proxy->stratum->listen)[1]?> -ewal YOUR_ETC_ADDRESS/YOUR_WORKER_NAME/YOUR_EMAIL -mode 1
         </pre>
 
         <h5>Linux</h5>
@@ -93,7 +91,7 @@
         export GPU_MAX_ALLOC_PERCENT 100
         export GPU_SINGLE_ALLOC_PERCENT 100
 
-        ./ethdcrminer64 -epool etc-eu1.cgpools.org:8008 -ewal YOUR_ETC_ADDRESS/YOUR_WORKER_NAME/YOUR_EMAIL -mode 1
+        ./ethdcrminer64 -epool <?=$sURL?>:<?=explode(':',$aConfig->proxy->stratum->listen)[1]?> -ewal YOUR_ETC_ADDRESS/YOUR_WORKER_NAME/YOUR_EMAIL -mode 1
         </pre>
         </div>
     </div>

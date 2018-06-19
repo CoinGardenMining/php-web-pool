@@ -36,28 +36,44 @@ function printHashes($iHash) {
     </div><!--/.row-->
 
     <div class="row">
-        <div class="col-lg-12">
-            <h1>Miners</h1>
-
-            <ul class="list-group">
-            <?php
-
-            if(count($aInfo->miners) > 0) {
-                $aMiners = (array)$aInfo->miners;
-                foreach(array_keys($aMiners) as $sMiner) {
-                    $oMiner = $aMiners[$sMiner];
-                ?>
-                <li class="list-group-item">
-                    <a href="/application/account/<?=$sMiner?>" title="View Account Details">
-                        <?=$sMiner?>
-                    </a>
-                    - <?=printHashes($oMiner->hr)?> - <?=date('d.m.Y H:i:s',$oMiner->lastBeat)?>
-                </li>
+        <div class="col-md-12">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    Miners
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-info-circle"></em></span></div>
+                <div class="panel-body articles-container">
                 <?php
+
+                if(count($aInfo->miners) > 0) {
+                    $aMiners = (array)$aInfo->miners;
+                    foreach(array_keys($aMiners) as $sMiner) {
+                        $oMiner = $aMiners[$sMiner];
+                    ?>
+                    <div class="article border-bottom">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-2 col-md-2 date">
+                                    <div class="large"><?=printHashes($oMiner->hr)?></div>
+                                    <div class="text-muted">-</div>
+                                </div>
+                                <div class="col-xs-10 col-md-10">
+                                    <h4><a href="/application/account/<?=$sMiner?>" title="View Account Details">
+                                            <?=$sMiner?>
+                                        </a></h4>
+                                    <p>
+                                        Last Share: <?=date('d.m.Y H:i:s',$oMiner->lastBeat)?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div><!--End .article-->
+                    <?php
+                    }
                 }
-            }
-            ?>
-            </ul>
-        </div>
+                ?>
+                </div>
+            </div>
+        </div><!--/.col-->
     </div>
 </div>

@@ -70,4 +70,9 @@ return [
             __DIR__ . '/../view',
         ],
     ],
+    'service_manager' => [
+        'factories' => [
+            'Application\Cache\Redis' => 'Application\Service\Factory\RedisFactory',
+        ]
+    ],
 ];

@@ -27,7 +27,8 @@ class Module
         return [
             'factories' => [
                 Controller\IndexController::class => function($container) {
-                    return new Controller\IndexController();
+                    $redis = false;
+                    return new Controller\IndexController($redis);
                 },
             ],
         ];
@@ -43,18 +44,24 @@ class Module
             case 'ella':
                 $viewModel->sCoinLabel = 'Ellaism';
                 $viewModel->sExplorerURL = 'https://explorer.ellaism.org';
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/blocks');
+                $obj = json_decode($json);
+                $viewModel->oBlocks = $obj;
                 break;
             case 'eth':
                 $viewModel->sCoinLabel = 'Ethereum';
-                $viewModel->sExplorerURL = 'https://explorer.ellaism.org/block';
+                $viewModel->sExplorerURL = 'https://etherscan.io';
                 break;
             case 'etc':
                 $viewModel->sCoinLabel = 'Ethereum Classic';
-                $viewModel->sExplorerURL = 'https://explorer.ellaism.org/block';
+                $viewModel->sExplorerURL = 'https://gastracker.io';
+                $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/blocks');
+                $obj = json_decode($json);
+                $viewModel->oBlocks = $obj;
                 break;
             default:
                 $viewModel->sCoinLabel = 'Unknown';
-                $viewModel->sExplorerURL = 'https://explorer.ellaism.org/block';
+                $viewModel->sExplorerURL = 'https://gastracker.io';
                 break;
         }
     }

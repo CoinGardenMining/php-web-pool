@@ -25,6 +25,8 @@ function printHashes($iHash) {
     }
 }
 
+$dCoinsPerDay = ($aInfo->hashrate/$oPool->iCurrentDiff);
+
 ?>
 <div class="col-sm-12 main">
     <div class="row">
@@ -72,6 +74,24 @@ function printHashes($iHash) {
                             <?=count((array)$aInfo->workers)?>
                         </div>
                         <div class="text-muted">Workers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-4 col-lg-4 no-padding">
+                <div class="panel panel-teal panel-widget border-right">
+                    <div class="row no-padding"><?php
+                        $sChange = '';
+                        if($aCoinData->percent_change_24h > 0 ){
+                            $sChange = '<label class="label label-success">+ '.$aCoinData->percent_change_24h.' %</label>';
+                        } else {
+                            $sChange = '<label class="label label-danger">'.$aCoinData->percent_change_24h.' %</label>';
+                        }
+
+                        ?><?=$sChange?></em>
+                        <div class="large">
+                            $ <?=number_format($aCoinData->price,2,'.','\'')?>
+                        </div>
+                        <div class="text-muted"><?=strtoupper($aConfig->coin)?> Price</div>
                     </div>
                 </div>
             </div>
