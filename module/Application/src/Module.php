@@ -38,31 +38,37 @@ class Module
         $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
         $time_start = microtime(true);
         $viewModel->timestart = $time_start;
-        $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
-        $viewModel->sCoin = $aConfig->coin;
-        switch($aConfig->coin) {
-            case 'ella':
-                $viewModel->sCoinLabel = 'Ellaism';
-                $viewModel->sExplorerURL = 'https://explorer.ellaism.org';
-                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/blocks');
-                $obj = json_decode($json);
-                $viewModel->oBlocks = $obj;
-                break;
-            case 'eth':
-                $viewModel->sCoinLabel = 'Ethereum';
-                $viewModel->sExplorerURL = 'https://etherscan.io';
-                break;
-            case 'etc':
-                $viewModel->sCoinLabel = 'Ethereum Classic';
-                $viewModel->sExplorerURL = 'https://gastracker.io';
-                $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/blocks');
-                $obj = json_decode($json);
-                $viewModel->oBlocks = $obj;
-                break;
-            default:
-                $viewModel->sCoinLabel = 'Unknown';
-                $viewModel->sExplorerURL = 'https://gastracker.io';
-                break;
+        # Only for Single Pool Instance
+        if(file_exists('/open-ethereum-pool/config.json')) {
+            $viewModel->sPoolMode = 'single';
+            $aConfig = json_decode(file_get_contents('/open-ethereum-pool/config.json'));
+            $viewModel->sCoin = $aConfig->coin;
+            switch ($aConfig->coin) {
+                case 'ella':
+                    $viewModel->sCoinLabel = 'Ellaism';
+                    $viewModel->sExplorerURL = 'https://explorer.ellaism.org';
+                    $json = file_get_contents('http://ella-eu1.cgpools.io:8080/api/blocks');
+                    $obj = json_decode($json);
+                    $viewModel->oBlocks = $obj;
+                    break;
+                case 'eth':
+                    $viewModel->sCoinLabel = 'Ethereum';
+                    $viewModel->sExplorerURL = 'https://etherscan.io';
+                    break;
+                case 'etc':
+                    $viewModel->sCoinLabel = 'Ethereum Classic';
+                    $viewModel->sExplorerURL = 'https://gastracker.io';
+                    $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/blocks');
+                    $obj = json_decode($json);
+                    $viewModel->oBlocks = $obj;
+                    break;
+                default:
+                    $viewModel->sCoinLabel = 'Unknown';
+                    $viewModel->sExplorerURL = 'https://gastracker.io';
+                    break;
+            }
+        } else {
+            $viewModel->sPoolMode = 'index';
         }
     }
 }

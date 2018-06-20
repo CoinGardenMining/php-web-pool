@@ -1,25 +1,114 @@
-<h1>Mining Pools <?=count($aPools)?></h1>
-
-<div class="row">
-    <?php
-    if(count($aPools) > 0) {
-        foreach($aPools as $oPool) {
-            ?>
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4><?=$oPool->name?></h4>
-                    </div>
-                    <div class="panel-body">
-                        Current Block: <b><?=$oPool->iCurrentBlock?></b><br/>
-                        Difficulty: <b><?=$oPool->iCurrentDiff?></b><br/>
-                        Miners online: <b><?=$oPool->iTotalMiners?></b><br/>
-                        Pool Hashrate: <b><?=$oPool->dTotalHashrate?></b><br/>
-                    </div>
-                </div>
-            </div>
-            <?php
+<?php
+/**
+* @todo Remove this crap ... View Helper not working somehow
+ */
+function printHashes($iHash) {
+        switch($iHash) {
+            case $iHash <= 1000:
+                return number_format($iHash,2).' H/s';
+                break;
+            case $iHash <= (1000*1000):
+                return number_format($iHash/1000,2).' KH/s';
+                break;
+            case $iHash <= (1000*1000*1000):
+                return number_format($iHash/(1000*1000),2).' MH/s';
+                break;
+            case $iHash <= (1000*1000*1000*1000):
+                return number_format($iHash/(1000*1000*1000),2).' GH/s';
+                break;
+            default:
+                break;
         }
     }
-    ?>
+
+    function printDifficulty($iDiff) {
+        return number_format($iDiff/1000000000000,3,'.','\'').' T';
+    }
+?>
+<style>
+    .parallax {
+        /* The image used */
+        background-image: url("/assets/images/home.jpeg");
+
+        /* Set a specific height */
+        height: 350px;
+        position:fixed;
+        width:100%;
+        left:0;
+        top:110px;
+
+        /* Create the parallax scrolling effect */
+        background-attachment: fixed;
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: 100% 80%;
+    }
+</style>
+<div class="col-sm-12 main">
+
+    <div class="parallax">
+        <div class="container">
+            <h1 class="center" style="font-size:48px; text-shadow: 0 0 2px #000; -moz-text-shadow: 0 0 2px #000; -webkit-text-shadow: 0 0 2px #000;"><label style="color:#53b685;">CG Pools</label> <small style="color:#fff;">Mining Pools by CoinGarden</small></h1>
+        </div>
+    </div>
+
+    <div class="row" style="padding:32px; margin-top:260px;">
+        <?php
+        if(count($aPools) > 0) {
+            foreach($aPools as $oPool) {
+                if(property_exists($oPool,'iCurrentBlock')) {
+                    ?>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>
+                                    <img src="/assets/coins/<?=strtolower($oPool->pool_coin)?>.png" style="height:32px;" />
+                                    <a href="<?=$oPool->url?>" title="Go To Mining Pool">
+                                        <?= $oPool->name ?>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        Current Block: <b class="pull-right"><?= $oPool->iCurrentBlock ?></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Difficulty: <b class="pull-right"><?=printDifficulty($oPool->iCurrentDiff)?></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Miners online: <b class="pull-right"><?= $oPool->iTotalMiners ?></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Pool Hashrate: <b class="pull-right"><?=printHashes($oPool->dTotalHashrate)?></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <?php
+                                        $iPercent = 100;
+                                        if((double)$oPool->aCoinData->percent_change_24h <= 0) {
+                                            $iPercent = round(100-$oPool->aCoinData->percent_change_24h);
+                                        }
+                                        $sChange = '';
+                                        if($oPool->aCoinData->percent_change_24h > 0 ){
+                                            $sChange = '<label class="label label-success">+ '.$oPool->aCoinData->percent_change_24h.' %</label>';
+                                        } else {
+                                            $sChange = '<label class="label label-danger">'.$oPool->aCoinData->percent_change_24h.' %</label>';
+                                        }
+                                        ?>
+                                        <?=$oPool->pool_coin?> Price:
+                                        <b class="pull-right">
+                                            $ <?=number_format($oPool->aCoinData->price,2,'.','')?>
+                                             <?=$sChange?>
+                                        </b>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+            }
+        }
+        ?>
+    </div>
 </div>

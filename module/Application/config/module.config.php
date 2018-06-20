@@ -20,7 +20,7 @@ return [
                     'route'    => '/',
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
+                        'action'     => 'poolindex',
                     ],
                 ],
             ],
@@ -68,6 +68,15 @@ return [
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
+        ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            'pooltools' => function($container) {
+                $oDbAdapter = $container->get(AdapterInterface::class);
+                $helper = new View\Helper\Pooltools($oDbAdapter);
+                return $helper;
+            },
         ],
     ],
     'service_manager' => [

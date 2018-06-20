@@ -35,25 +35,17 @@ class IndexController extends AbstractActionController
                 'api_url_stats'=>'http://etc-eu1.cgpools.io:8080/apietc/stats',
                 'type'=>'open-ethereum-pool',
                 'pool_coin'=>'ETC',
-                'name'=>'ETC Pool',
+                'url'=>'http://etc.cgpools.io',
+                'name'=>'Ethereum Classic',
+                'ccc_id'=>1321,
             ],
             'ella-eu1' => (object)[
-                'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/apietc/stats',
+                'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/api/stats',
                 'type'=>'open-ethereum-pool',
                 'pool_coin'=>'ELLA',
-                'name'=>'ELLA Pool',
-            ],
-            'zec-eu1' => (object)[
-                'api_url_stats'=>'http://ec2-18-184-253-12.eu-central-1.compute.amazonaws.com:8080/apietc/stats',
-                'type'=>'znomp',
-                'pool_coin'=>'ZEC',
-                'name'=>'ZEC Dev Pool',
-            ],
-            'lux-eu1' => (object)[
-                'api_url_stats'=>'http://ec2-18-184-253-12.eu-central-1.compute.amazonaws.com:8080/apietc/stats',
-                'type'=>'yimp',
-                'pool_coin'=>'LUX',
-                'name'=>'LUX Dev Pool',
+                'url'=>'http://ella.cgpools.io',
+                'name'=>'Ellaism',
+                'ccc_id'=>2122,
             ],
         ];
         $aPools = [];
@@ -68,10 +60,12 @@ class IndexController extends AbstractActionController
                     case 'open-ethereum-pool':
                         $json = file_get_contents($oPool->api_url_stats);
                         $obj = json_decode($json);
-                        $oPool->dTotalHashrate = $obj->hashrate;
-                        $oPool->iTotalMiners = $obj->minersTotal;
-                        $oPool->iCurrentBlock = $obj->nodes[0]->height;
-                        $oPool->iCurrentDiff = $obj->nodes[0]->difficulty;
+                        if(is_object($obj)) {
+                            $oPool->dTotalHashrate = $obj->hashrate;
+                            $oPool->iTotalMiners = $obj->minersTotal;
+                            $oPool->iCurrentBlock = $obj->nodes[0]->height;
+                            $oPool->iCurrentDiff = $obj->nodes[0]->difficulty;
+                        }
                         break;
                     default:
                         $oPool->dTotalHashrate = 0;
@@ -79,6 +73,19 @@ class IndexController extends AbstractActionController
                         $oPool->iCurrentBlock = 0;
                         $oPool->iCurrentDiff = 0;
                         break;
+                }
+                $sRet = file_get_contents('https://api.coinmarketcap.com/v2/ticker/'.$oPool->ccc_id.'/?convert=USD');
+                $oInfo = json_decode($sRet);
+                if(is_object($oInfo)) {
+                    $oPool->aCoinData = (object)[
+                        'max_supply'=>$oInfo->data->max_supply,
+                        'circulating_supply'=>$oInfo->data->circulating_supply,
+                        'price'=>$oInfo->data->quotes->USD->price,
+                        'volume_24h'=>$oInfo->data->quotes->USD->volume_24h,
+                        'market_cap'=>$oInfo->data->quotes->USD->market_cap,
+                        'percent_change_24h'=>$oInfo->data->quotes->USD->percent_change_24h,
+                        'date_last_update'=>date('Y-m-d H:i:s',time()),
+                    ];
                 }
                 $aPools[] = $oPool;
             }
@@ -107,8 +114,8 @@ class IndexController extends AbstractActionController
             case 'ella':
                 $oPool = (object)[
                     'type'=>'open-ethereum-pool',
-                    'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/apietc/stats'];
-                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/blocks');
+                    'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/api/stats'];
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/api/blocks');
                 $oBlockInfo = json_decode($json);
                 break;
             default:
@@ -188,7 +195,7 @@ class IndexController extends AbstractActionController
                 $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/miners');
                 break;
             case 'ella':
-                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/miners');
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/api/miners');
                 break;
             default:
                 break;
@@ -212,7 +219,7 @@ class IndexController extends AbstractActionController
                 $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/accounts/'.$sAccount);
                 break;
             case 'ella':
-                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/accounts/'.$sAccount);
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/api/accounts/'.$sAccount);
                 break;
             default:
                 break;
@@ -263,7 +270,7 @@ class IndexController extends AbstractActionController
                 $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/blocks');
                 break;
             case 'ella':
-                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/blocks');
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/api/blocks');
                 break;
             default:
                 break;
@@ -292,7 +299,7 @@ class IndexController extends AbstractActionController
                 $json = file_get_contents('http://etc-eu1.cgpools.io:8080/apietc/payments');
                 break;
             case 'ella':
-                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/apietc/payments');
+                $json = file_get_contents('http://ella-eu1.cgpools.io:8080/api/payments');
                 break;
             default:
                 break;
@@ -317,7 +324,7 @@ class IndexController extends AbstractActionController
             case 'ella':
                 $oPool = (object)[
                     'type'=>'open-ethereum-pool',
-                    'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/apietc/stats'];
+                    'api_url_stats'=>'http://ella-eu1.cgpools.io:8080/api/stats'];
                 break;
             default:
                 break;

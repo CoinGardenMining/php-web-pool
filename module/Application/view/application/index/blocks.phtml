@@ -31,7 +31,7 @@
                                </h3>
                            </div>
                            <div class="card-block">
-                               <small><i>Found
+                               <small><i>Found <?php if($oBlock->uncleHeight != 0) { echo ' (Uncle)'; } ?>
                                        <br/>
                                        <?=date('d.m.Y H:i:s',$oBlock->timestamp)?></i></small>
                            </div>
@@ -56,7 +56,7 @@
                                 </h3>
                             </div>
                             <div class="card-block">
-                                <small><i>Found
+                                <small><i>Found <?php if($oBlock->uncleHeight != 0) { echo ' (Uncle)'; } ?>
                                         <br/>
                                         <?=date('d.m.Y H:i:s',$oBlock->timestamp)?></i></small>
                             </div>
@@ -88,7 +88,7 @@
                                     </h3>
                                 </div>
                                 <div class="card-block">
-                                    <small><i>Found
+                                    <small><i>Found <?php if($oBlock->uncleHeight != 0) { echo ' (Uncle)'; } ?>
                                     <br/>
                                     <?=date('d.m.Y H:i:s',$oBlock->timestamp)?></i></small>
                                 </div>
