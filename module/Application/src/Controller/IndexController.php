@@ -27,6 +27,8 @@ class IndexController extends AbstractActionController
 
     public function poolindexAction()
     {
+        $this->layout('layout/poolindex');
+
         /**
          * Define List of All Pools
          */

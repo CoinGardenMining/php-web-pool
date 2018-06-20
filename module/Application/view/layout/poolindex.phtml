@@ -25,6 +25,7 @@
 
     <!--Custom Font-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
     <!--[if lt IE 9]>
 	<script src="/js/html5shiv.js"></script>
@@ -67,11 +68,34 @@
 </nav>
 <div class="container">
     <?= $this->content ?>
-    <hr>
-    <footer>
-        <p>&copy; <?= date('Y') ?> CG Pools by <a href="https://coin-garden.io" target="_blank" title="Visit CoinGarden Website">CoinGarden</a>. Contact us admin@cgpools.io - Powered by <a href="https://github.com/CoinGardenMining/php-web-pool" target="_blank" title="PHP Web Pool in Github">php-web-pool</a></p>
-    </footer>
 </div>
+<div class="container-fluid" style="background:#53b685;">
+    <div class="col-md-12 text-center">
+        <h3 style="color:#fff;">Stay in touch</h3>
+    </div>
+    <div class="col-md-4 text-center">
+        <a href="https://discord.gg/bFsR5z" title="Join us on Discord" style="color:#fff;" target="_blank">
+            <i class="fab fa-discord fa-4x"></i>
+            <h5 style="color:#fff;">Join us on Discord</h5>
+        </a>
+    </div>
+    <div class="col-md-4 text-center">
+        <a href="https://discord.gg/bFsR5z" title="Follow us on Twitter" style="color:#fff;" target="_blank">
+            <i class="fab fa-twitter-square fa-4x"></i>
+            <h5 style="color:#fff;">Follow us on Twitter</h5>
+        </a>
+    </div>
+    <div class="col-md-4 text-center">
+        <a href="https://discord.gg/bFsR5z" title="Announcement Channel" style="color:#fff;" target="_blank"        >
+            <i class="fab fa-telegram fa-4x"></i>
+            <h5 style="color:#fff;">Announcement Channel</h5>
+        </a>
+    </div>
+</div>
+<hr/>
+<footer>
+    <p>&copy; <?= date('Y') ?> CG Pools by <a href="https://coin-garden.io" target="_blank" title="Visit CoinGarden Website">CoinGarden</a>. Contact us admin@cgpools.io - Powered by <a href="https://github.com/CoinGardenMining/php-web-pool" target="_blank" title="PHP Web Pool in Github">php-web-pool</a></p>
+</footer>
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/chart.min.js"></script>
